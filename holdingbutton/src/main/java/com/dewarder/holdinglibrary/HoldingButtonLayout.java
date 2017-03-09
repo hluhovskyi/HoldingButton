@@ -30,7 +30,7 @@ public class HoldingButtonLayout extends FrameLayout {
     private float mCancelOffset = 0.3f;
     private int mOffsetX = 0;
     private int mOffsetY = 0;
-    private float mDX;
+    private float mDeltaX;
 
     private View mHoldingCircle;
     private HoldingDrawable mHoldingDrawable;
@@ -171,10 +171,7 @@ public class HoldingButtonLayout extends FrameLayout {
                     mHoldingCircle.setTranslationX(translationX);
                     mHoldingCircle.setTranslationY(translationY);
 
-                    System.out.println("mHoldingView.getX() = " + mHoldingView.getX());
-                    System.out.println("mHoldingViewLocation[0] = " + mHoldingViewLocation[0]);
-
-                    mDX = mHoldingView.getX() - event.getRawX() + mHoldingView.getWidth() / 2 + mOffsetX;
+                    mDeltaX = mHoldingView.getX() - event.getRawX() + mHoldingView.getWidth() / 2 + mOffsetX;
 
                     mHoldingDrawable.expand();
                     mIsExpanded = true;
@@ -185,7 +182,7 @@ public class HoldingButtonLayout extends FrameLayout {
             case MotionEvent.ACTION_MOVE: {
                 if (mIsExpanded) {
                     float circleCenterX = mHoldingCircle.getWidth() / 2;
-                    float x = event.getRawX() + mDX - circleCenterX;
+                    float x = event.getRawX() + mDeltaX - circleCenterX;
                     float slideOffset = 1 - (x + circleCenterX) / getWidth();
                     if (slideOffset >= 0 && slideOffset <= 1) {
                         mHoldingCircle.animate().x(x).setDuration(0).start();
@@ -334,7 +331,7 @@ public class HoldingButtonLayout extends FrameLayout {
             mHoldingView.animate()
                     .alpha(1f)
                     .scaleY(1f)
-                    .setDuration(200)
+                    .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
                     .start();
         }
     }
