@@ -1,0 +1,17 @@
+<resources>
+
+    <declare-styleable name="HoldingButtonLayout">
+        <attr name="hbl_radius" format="dimension"/>
+        <attr name="hbl_icon" format="reference"/>
+        <attr name="hbl_cancel_icon" format="reference"/>
+        <attr name="hbl_offset_x" format="dimension"/>
+        <attr name="hbl_offset_y" format="dimension"/>
+        <attr name="hbl_holding_view" format="reference"/>
+        <attr name="hbl_color" format="color"/>
+        <attr name="hbl_cancel_color" format="color"/>
+        <attr name="hbl_second_radius" format="dimension"/>
+        <attr name="hbl_second_alpha" format="float"/>
+        <attr name="hbl_cancel_offset" format="float"/>
+    </declare-styleable>
+
+</resources>
