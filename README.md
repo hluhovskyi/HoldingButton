@@ -1,0 +1,1 @@
+![Example](/_arts/example.gif "Example")
