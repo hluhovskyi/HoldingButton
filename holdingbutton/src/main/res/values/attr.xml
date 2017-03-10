@@ -12,6 +12,7 @@
         <attr name="hbl_second_radius" format="dimension"/>
         <attr name="hbl_second_alpha" format="float"/>
         <attr name="hbl_cancel_offset" format="float"/>
+        <attr name="hbl_animate_holding_view" format="boolean"/>
     </declare-styleable>
 
 </resources>

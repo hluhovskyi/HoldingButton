@@ -12,6 +12,7 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -96,6 +97,16 @@ public class HoldingDrawable extends Drawable {
         return PixelFormat.OPAQUE;
     }
 
+    @Override
+    public int getIntrinsicHeight() {
+        return (int) (mRadius * 2 + mSecondRadius * 2);
+    }
+
+    @Override
+    public int getIntrinsicWidth() {
+        return (int) (mRadius * 2 + mSecondRadius * 2);
+    }
+
     public void expand() {
         notifyOnBeforeExpand();
         mIsExpanded = true;
@@ -134,16 +145,21 @@ public class HoldingDrawable extends Drawable {
         }
     }
 
-    public float getRadius(){
-        return mRadius;
-    }
-
     public void setRadius(float radius) {
         mRadius = radius;
         invalidateSelf();
     }
 
-    public void setColor(int color) {
+    public float getRadius() {
+        return mRadius;
+    }
+
+    @ColorInt
+    public int getColor() {
+        return mDefaultColor;
+    }
+
+    public void setColor(@ColorInt int color) {
         mDefaultColor = color;
         if (!mIsCancel) {
             mPaint.setColor(color);
@@ -151,6 +167,11 @@ public class HoldingDrawable extends Drawable {
             mSecondPaint.setAlpha(mSecondAlpha);
         }
         invalidateSelf();
+    }
+
+    @ColorInt
+    public int getCancelColor() {
+        return mCancelColor;
     }
 
     public void setCancelColor(int color) {
@@ -171,9 +192,18 @@ public class HoldingDrawable extends Drawable {
         invalidateSelf();
     }
 
+    @IntRange(from = 0, to = 255)
+    public int getSecondAlpha() {
+        return mSecondAlpha;
+    }
+
     public void setSecondAlpha(@IntRange(from = 0, to = 255) int alpha) {
         mSecondAlpha = alpha;
         invalidateSelf();
+    }
+
+    public float getSecondRadius() {
+        return mSecondRadius;
     }
 
     public void setSecondRadius(float radius) {
