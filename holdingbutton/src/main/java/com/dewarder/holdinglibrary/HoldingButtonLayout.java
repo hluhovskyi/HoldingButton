@@ -191,7 +191,8 @@ public class HoldingButtonLayout extends FrameLayout {
                 if (mIsExpanded) {
                     float circleCenterX = mHoldingCircle.getWidth() / 2;
                     float x = event.getRawX() + mDeltaX - circleCenterX;
-                    float slideOffset = 1 - (x + circleCenterX) / getWidth();
+                    float slideOffset = 1 - (x + circleCenterX) / (getWidth() - mHoldingView.getWidth() / 2 + mOffsetX);
+
                     if (slideOffset >= 0 && slideOffset <= 1) {
                         mHoldingCircle.animate().x(x).setDuration(0).start();
 
