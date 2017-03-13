@@ -353,6 +353,22 @@ public class HoldingButtonLayout extends FrameLayout {
         return mAnimateHoldingView;
     }
 
+    public int getOffsetX() {
+        return mOffset[0];
+    }
+
+    public void setOffsetX(int offsetX) {
+        mOffset[0] = offsetX;
+    }
+
+    public int getOffsetY() {
+        return mOffset[1];
+    }
+
+    public void setOffsetY(int offsetY) {
+        mOffset[1] = offsetY;
+    }
+
     private void notifyOnBeforeExpand() {
         for (HoldingButtonLayoutListener listener : mListeners) {
             listener.onBeforeExpand();
