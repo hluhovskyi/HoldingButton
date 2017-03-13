@@ -6,9 +6,9 @@ Button which is visible while user holds it. Main use case is controlling audio 
 
 ## How to use
 
-* Wrap your layout with `HoldingButtonLayout`. It is simple `FrameLayout` inside.
+1. Wrap your layout with `HoldingButtonLayout`. It is simple `FrameLayout` inside.
 
-```xml
+   ```xml
     <com.dewarder.holdinglibrary.HoldingButtonLayout
         android:id="@+id/input_holder"
         android:layout_width="match_parent"
@@ -27,30 +27,46 @@ Button which is visible while user holds it. Main use case is controlling audio 
  
     </com.dewarder.holdinglibrary.HoldingButtonLayout>
 
-```
+    ```
 
-* Set `app:hbl_holding_view` property to id of view which would be translated to `HoldingButton`
+2. Set `app:hbl_holding_view` property to id of view which would be translated to `HoldingButton`
 
-```xml
+   ```xml
     <com.dewarder.holdinglibrary.HoldingButtonLayout
         android:id="@+id/input_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hbl_holding_view="@+id/start_record">
-```
+   ```
 
-* Set `app:hbl_icon` property to icon (usually it is the same as in translated view) which would be appeared in `HoldingButton`.
+3. Set `app:hbl_icon` property to icon (usually it is the same as in translated view) which would be appeared in `HoldingButton`.
 
-```xml
+   ```xml
     <com.dewarder.holdinglibrary.HoldingButtonLayout
         android:id="@+id/input_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hbl_holding_view="@+id/start_record"
         app:hbl_icon="@drawable/ic_mic_black_24dp">
-```
+   ```
 
-* Enjoy!
+4. Listen events
+
+   ```java
+   
+   mHoldingButtonLayout.addListener(new SimpleHoldingButtonLayoutListener() {
+       @Override
+       public void onOffsetChanged(float offset, boolean isCancel) {
+           mSlideToCancel.setTranslationX(-mHoldingButtonLayout.getWidth() * offset);
+           mSlideToCancel.setAlpha(1 - SLIDE_TO_CANCEL_ALPHA_MULTIPLIER * offset);
+       }
+   });
+   
+   ```
+
+5. Enjoy!
+
+   ![Check full example](https://github.com/dewarder/HoldingButton/tree/master/holdingbuttonsample)
 
 ## Getting started
 
@@ -63,16 +79,53 @@ compile 'com.dewarder:holdingbutton:0.0.3'
 ## All XML properties
 
 - `hbl_direction` (`getDirection/setDirection`)
+
+   Set direction of sliding. Possible directions are `start` (from right to left) and `end` (from left to right).
+
+   ![](/_arts/hbl_directions.png)
+
 - `hbl_cancel_offset` (`getCancelOffset/setCancelOffset`)
+
+   Set minimum offset for cancel action.
+
+   ![](/_arts/hbl_cancel_offset.png)
+
 - `hbl_icon` (`setIcon`)
+
+   ![](/_arts/hbl_icon.png)
+
 - `hbl_cancel_icon` (`setCancelIcon`)
+
+   ![](/_arts/hbl_cancel_icon.png)
+
 - `hbl_color` (`getColor/setColor`)
+
+   ![](/_arts/hbl_color.png)
+
 - `hbl_cancel_color` (`getCancelColor/CancelColor`)
+
+   ![](/_arts/hbl_cancel_color.png)
+
 - `hbl_radius` (`getRadius/setRadius`)
+
+   ![](/_arts/hbl_radius.png)
+
 - `hbl_second_radius` (`getSecondRadius/setSecondRadius`)
+
+   ![](/_arts/hbl_second_radius.png)
+
 - `hbl_second_alpha` (`getSecondAlpha/setSecondAlpha`)
+
+   ![](/_arts/hbl_second_alpha.png)
+
 - `hbl_offset_x` (`getOffsetX/setOffsetX`)
+
+   ![](/_arts/hbl_offset_x.png)
+
 - `hbl_offset_y` (`getOffsetY/setOffsetY`)
+
+   ![](/_arts/hbl_offset_y.png)
+
 - `hbl_animate_holding_view` (`setAnimateHoldingView/isAnimateHoldingView`)
 
 ## License
