@@ -34,7 +34,7 @@ public class SimpleHoldingButtonLayoutListener implements HoldingButtonLayoutLis
     }
 
     @Override
-    public void onCollapse() {
+    public void onCollapse(boolean isCancel) {
 
     }
 

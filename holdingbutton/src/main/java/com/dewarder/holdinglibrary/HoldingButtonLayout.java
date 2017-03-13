@@ -56,6 +56,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
     private Direction mDirection = Direction.START;
     private boolean mAnimateHoldingView = true;
+    private boolean mIsCancel = false;
     private boolean mIsExpanded = false;
 
     private final DrawableListener mDrawableListener = new DrawableListener();
@@ -202,6 +203,7 @@ public class HoldingButtonLayout extends FrameLayout {
                     mDeltaX = event.getRawX() - centerX - mDirection.getOffsetX(mOffset[0]);
 
                     mHoldingDrawable.expand();
+                    mIsCancel = false;
                     mIsExpanded = true;
                     return true;
                 }
@@ -215,9 +217,9 @@ public class HoldingButtonLayout extends FrameLayout {
 
                     if (slideOffset >= 0 && slideOffset <= 1) {
                         mHoldingCircle.setX(x);
-                        boolean isCancel = slideOffset >= mCancelOffset;
-                        mHoldingDrawable.setCancel(isCancel);
-                        notifyOnOffsetChanged(slideOffset, isCancel);
+                        mIsCancel = slideOffset >= mCancelOffset;
+                        mHoldingDrawable.setCancel(mIsCancel);
+                        notifyOnOffsetChanged(slideOffset, mIsCancel);
                     }
                     return true;
                 }
@@ -403,9 +405,9 @@ public class HoldingButtonLayout extends FrameLayout {
         }
     }
 
-    private void notifyOnCollapse() {
+    private void notifyOnCollapse(boolean isCancel) {
         for (HoldingButtonLayoutListener listener : mListeners) {
-            listener.onCollapse();
+            listener.onCollapse(isCancel);
         }
     }
 
@@ -440,7 +442,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
         @Override
         public void onCollapse() {
-            notifyOnCollapse();
+            notifyOnCollapse(mIsCancel);
             mHoldingCircle.setVisibility(GONE);
 
             if (mAnimateHoldingView) {

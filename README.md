@@ -73,7 +73,7 @@ Button which is visible while user holds it. Main use case is controlling audio 
 Add library as dependency to your `build.gradle`.
 
 ```
-compile 'com.dewarder:holdingbutton:0.0.3'
+compile 'com.dewarder:holdingbutton:0.0.4'
 ```
 
 ## All XML properties

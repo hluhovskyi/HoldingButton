@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.dewarder.holdinglibrary.HoldingButtonLayout;
 import com.dewarder.holdinglibrary.HoldingButtonLayoutListener;
@@ -112,8 +113,12 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
     }
 
     @Override
-    public void onCollapse() {
-
+    public void onCollapse(boolean isCancel) {
+        if (isCancel) {
+            Toast.makeText(this, "Action canceled!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Action submited!", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
