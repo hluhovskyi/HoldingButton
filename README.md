@@ -4,6 +4,14 @@ Button which is visible while user holds it. Main use case is controlling audio 
 
 <img src="/_arts/example.gif" width="300" height="533"/>
 
+## Getting started
+
+Add library as dependency to your `build.gradle`.
+
+```
+compile 'com.dewarder:holdingbutton:0.0.4'
+```
+
 ## How to use
 
 1. Wrap your layout with `HoldingButtonLayout`. It is simple `FrameLayout` inside.
@@ -67,14 +75,6 @@ Button which is visible while user holds it. Main use case is controlling audio 
 5. Enjoy!
 
    ![Check full example](https://github.com/dewarder/HoldingButton/tree/master/holdingbuttonsample)
-
-## Getting started
-
-Add library as dependency to your `build.gradle`.
-
-```
-compile 'com.dewarder:holdingbutton:0.0.4'
-```
 
 ## All XML properties
 
