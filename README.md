@@ -6,9 +6,9 @@ Button which is visible while user holds it. Main use case is controlling audio 
 
 ## How to use
 
-1. Wrap your layout with `HoldingButtonLayout`. It is simple `FrameLayout` inside.
+* Wrap your layout with `HoldingButtonLayout`. It is simple `FrameLayout` inside.
 
-```
+```xml
     <com.dewarder.holdinglibrary.HoldingButtonLayout
         android:id="@+id/input_holder"
         android:layout_width="match_parent"
@@ -29,9 +29,9 @@ Button which is visible while user holds it. Main use case is controlling audio 
 
 ```
 
-2. Set `app:hbl_holding_view` property to id of view which would be translated to `HoldingButton`
+* Set `app:hbl_holding_view` property to id of view which would be translated to `HoldingButton`
 
-```
+```xml
     <com.dewarder.holdinglibrary.HoldingButtonLayout
         android:id="@+id/input_holder"
         android:layout_width="match_parent"
@@ -39,9 +39,9 @@ Button which is visible while user holds it. Main use case is controlling audio 
         app:hbl_holding_view="@+id/start_record">
 ```
 
-3. Set `app:hbl_icon` property to icon (usually it is the same as in translated view) which would be appeared in `HoldingButton`.
+* Set `app:hbl_icon` property to icon (usually it is the same as in translated view) which would be appeared in `HoldingButton`.
 
-```
+```xml
     <com.dewarder.holdinglibrary.HoldingButtonLayout
         android:id="@+id/input_holder"
         android:layout_width="match_parent"
@@ -50,11 +50,11 @@ Button which is visible while user holds it. Main use case is controlling audio 
         app:hbl_icon="@drawable/ic_mic_black_24dp">
 ```
 
-4. Enjoy!
+* Enjoy!
 
 ## Getting started
 
-Add library as dependency to your build.gradle.
+Add library as dependency to your `build.gradle`.
 
 ```
 compile 'com.dewarder:holdingbutton:0.0.3'
@@ -62,17 +62,18 @@ compile 'com.dewarder:holdingbutton:0.0.3'
 
 ## All XML properties
 
-- `hbl_direction`
-- `hbl_cancel_offset`
-- `hbl_icon` 
-- `hbl_cancel_icon`
-- `hbl_color`
-- `hbl_cancel_color`
-- `hbl_second_radius`
-- `hbl_second_alpha`
-- `hbl_offset_x`
-- `hbl_offset_y`
-- `hbl_animate_holding_view`
+- `hbl_direction` (`getDirection/setDirection`)
+- `hbl_cancel_offset` (`getCancelOffset/setCancelOffset`)
+- `hbl_icon` (`setIcon`)
+- `hbl_cancel_icon` (`setCancelIcon`)
+- `hbl_color` (`getColor/setColor`)
+- `hbl_cancel_color` (`getCancelColor/CancelColor`)
+- `hbl_radius` (`getRadius/setRadius`)
+- `hbl_second_radius` (`getSecondRadius/setSecondRadius`)
+- `hbl_second_alpha` (`getSecondAlpha/setSecondAlpha`)
+- `hbl_offset_x` (`getOffsetX/setOffsetX`)
+- `hbl_offset_y` (`getOffsetY/setOffsetY`)
+- `hbl_animate_holding_view` (`setAnimateHoldingView/isAnimateHoldingView`)
 
 ## License
 
