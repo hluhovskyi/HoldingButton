@@ -37,7 +37,7 @@ public class HoldingDrawable extends Drawable {
     private ValueAnimator mAnimator;
     private ValueAnimator mCancelAnimator;
     private float mRadius = 120f;
-    private float mSecondRadius = 140f;
+    private float mSecondRadius = 20f;
     private float[] mExpandedScaleFactor = new float[1];
 
     private int mDefaultColor = Color.parseColor("#3949AB");
@@ -63,8 +63,8 @@ public class HoldingDrawable extends Drawable {
         float centerX = canvas.getWidth() / 2f;
         float centerY = canvas.getHeight() / 2f;
         if (mIsExpanded) {
-            if (mSecondRadius > mRadius) {
-                canvas.drawCircle(centerX, centerY, mSecondRadius, mSecondPaint);
+            if (mSecondRadius > 0) {
+                canvas.drawCircle(centerX, centerY, mRadius + mSecondRadius, mSecondPaint);
             }
 
             float currentRadius = mRadius * (MIN_EXPANDED_RADIUS_MULTIPLIER + (1 - MIN_EXPANDED_RADIUS_MULTIPLIER) * mExpandedScaleFactor[0]);

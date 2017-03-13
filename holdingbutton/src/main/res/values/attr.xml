@@ -13,6 +13,10 @@
         <attr name="hbl_second_alpha" format="float"/>
         <attr name="hbl_cancel_offset" format="float"/>
         <attr name="hbl_animate_holding_view" format="boolean"/>
+        <attr name="hbl_direction" format="enum">
+            <enum name="start" value="0"/>
+            <enum name="end" value="1"/>
+        </attr>
     </declare-styleable>
 
 </resources>

@@ -18,13 +18,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         app:hbl_cancel_icon="@drawable/ic_close_black_24dp"
         app:hbl_holding_view="@+id/start_record"
         app:hbl_icon="@drawable/ic_mic_black_24dp"
         app:hbl_offset_x="-16dp"
         app:hbl_offset_y="-16dp"
         app:hbl_radius="40dp"
-        app:hbl_second_radius="48dp">
+        app:hbl_second_radius="8dp">
 
         <LinearLayout
             android:id="@+id/slide_to_cancel"
@@ -54,8 +55,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="center_vertical"
+            android:layout_gravity="bottom|center_horizontal"
+            android:gravity="center"
             android:minHeight="48dp"
             android:orientation="horizontal">
 
@@ -82,5 +83,6 @@
         </LinearLayout>
 
     </com.dewarder.holdinglibrary.HoldingButtonLayout>
+
 
 </RelativeLayout>

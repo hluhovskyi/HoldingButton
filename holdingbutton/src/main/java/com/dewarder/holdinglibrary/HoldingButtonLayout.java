@@ -30,15 +30,15 @@ public class HoldingButtonLayout extends FrameLayout {
     private View mHoldingView;
     private Rect mHoldingViewRect = new Rect();
     private float mCancelOffset = 0.3f;
-    private int mOffsetX = 0;
-    private int mOffsetY = 0;
     private float mDeltaX;
 
     private View mHoldingCircle;
     private HoldingDrawable mHoldingDrawable;
+    private int[] mOffset = new int[2];
     private int[] mViewLocation = new int[2];
     private int[] mHoldingViewLocation = new int[2];
 
+    private Direction mDirection = Direction.START;
     private boolean mAnimateHoldingView = true;
     private boolean mIsExpanded = false;
 
@@ -100,11 +100,11 @@ public class HoldingButtonLayout extends FrameLayout {
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_offset_x)) {
-                mOffsetX = array.getDimensionPixelSize(R.styleable.HoldingButtonLayout_hbl_offset_x, 0);
+                mOffset[0] = array.getDimensionPixelSize(R.styleable.HoldingButtonLayout_hbl_offset_x, 0);
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_offset_y)) {
-                mOffsetY = array.getDimensionPixelSize(R.styleable.HoldingButtonLayout_hbl_offset_y, 0);
+                mOffset[1] = array.getDimensionPixelSize(R.styleable.HoldingButtonLayout_hbl_offset_y, 0);
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_holding_view)) {
@@ -143,6 +143,11 @@ public class HoldingButtonLayout extends FrameLayout {
                 mCancelOffset = cancelOffset;
             }
 
+            if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_direction)) {
+                int flag = array.getInt(R.styleable.HoldingButtonLayout_hbl_direction, 0);
+                mDirection = Direction.fromFlag(flag);
+            }
+
             array.recycle();
         }
     }
@@ -159,7 +164,6 @@ public class HoldingButtonLayout extends FrameLayout {
         return false;
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int action = event.getActionMasked();
@@ -173,13 +177,13 @@ public class HoldingButtonLayout extends FrameLayout {
                     int centerX = mHoldingViewLocation[0] + mHoldingView.getWidth() / 2;
                     int centerY = mHoldingViewLocation[1] + mHoldingView.getHeight() / 2;
 
-                    float translationX = centerX - mHoldingCircle.getWidth() / 2f + mOffsetX;
-                    float translationY = centerY - mHoldingCircle.getHeight() / 2f + mOffsetY;
+                    float translationX = centerX - mHoldingCircle.getWidth() / 2f + mDirection.getOffsetX(mOffset[0]);
+                    float translationY = centerY - mHoldingCircle.getHeight() / 2f + mOffset[1];
 
                     mHoldingCircle.setTranslationX(translationX);
                     mHoldingCircle.setTranslationY(translationY);
 
-                    mDeltaX = mHoldingView.getX() - event.getRawX() + mHoldingView.getWidth() / 2 + mOffsetX;
+                    mDeltaX = event.getRawX() - centerX - mDirection.getOffsetX(mOffset[0]);
 
                     mHoldingDrawable.expand();
                     mIsExpanded = true;
@@ -190,13 +194,12 @@ public class HoldingButtonLayout extends FrameLayout {
             case MotionEvent.ACTION_MOVE: {
                 if (mIsExpanded) {
                     float circleCenterX = mHoldingCircle.getWidth() / 2;
-                    float x = event.getRawX() + mDeltaX - circleCenterX;
-                    float slideOffset = 1 - (x + circleCenterX) / (getWidth() - mHoldingView.getWidth() / 2 + mOffsetX);
+                    float x = event.getRawX() - mDeltaX - circleCenterX;
+                    float slideOffset = mDirection.getSlideOffset(x, circleCenterX, mViewLocation, getWidth(), mHoldingViewLocation, mHoldingView.getWidth(), mOffset);
 
                     if (slideOffset >= 0 && slideOffset <= 1) {
-                        mHoldingCircle.animate().x(x).setDuration(0).start();
-
-                        boolean isCancel = slideOffset > mCancelOffset;
+                        mHoldingCircle.setX(x);
+                        boolean isCancel = slideOffset >= mCancelOffset;
                         mHoldingDrawable.setCancel(isCancel);
                         notifyOnOffsetChanged(slideOffset, isCancel);
                     }
@@ -334,6 +337,14 @@ public class HoldingButtonLayout extends FrameLayout {
         mHoldingView = holdingView;
     }
 
+    public Direction getDirection() {
+        return mDirection;
+    }
+
+    public void setDirection(Direction direction) {
+        mDirection = direction;
+    }
+
     public void setAnimateHoldingView(boolean animate) {
         mAnimateHoldingView = animate;
     }
@@ -411,5 +422,56 @@ public class HoldingButtonLayout extends FrameLayout {
                         .start();
             }
         }
+    }
+
+    public enum Direction {
+
+        START(0) {
+            @Override
+            int getOffsetX(int offsetX) {
+                return offsetX;
+            }
+
+            @Override
+            float getSlideOffset(float x, float circleCenterX, int[] viewLocation, int viewWidth, int[] holdingViewLocation, int holdingViewWidth, int[] offset) {
+                float holdingViewCenterX = holdingViewLocation[0] + holdingViewWidth / 2;
+                float minX = viewLocation[0] + circleCenterX;
+                return (x + circleCenterX - holdingViewCenterX - offset[0]) / (minX - holdingViewCenterX);
+            }
+        },
+
+        END(1) {
+            @Override
+            int getOffsetX(int offsetX) {
+                return -offsetX;
+            }
+
+            @Override
+            float getSlideOffset(float x, float circleCenterX, int[] viewLocation, int viewWidth, int[] holdingViewLocation, int holdingViewWidth, int[] offset) {
+                float holdingViewCenterX = holdingViewLocation[0] + holdingViewWidth / 2;
+                float maxX = viewLocation[0] + viewWidth - circleCenterX;
+                return (x + circleCenterX - holdingViewCenterX + offset[0]) / (maxX - holdingViewCenterX);
+            }
+        };
+
+        private final int mFlag;
+
+        Direction(int flag) {
+            mFlag = flag;
+        }
+
+        abstract int getOffsetX(int offsetX);
+
+        abstract float getSlideOffset(float x, float circleCenterX, int[] viewLocation, int viewWidth, int[] holdingViewLocation, int holdingViewWidth, int[] offset);
+
+        public static Direction fromFlag(int flag) {
+            for (Direction direction : values()) {
+                if (direction.mFlag == flag) {
+                    return direction;
+                }
+            }
+            throw new IllegalStateException("There is no direction with flag " + flag);
+        }
+
     }
 }
