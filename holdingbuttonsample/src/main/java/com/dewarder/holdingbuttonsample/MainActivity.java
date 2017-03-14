@@ -23,22 +23,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dewarder.holdinglibrary.HoldingButtonLayout;
 import com.dewarder.holdinglibrary.HoldingButtonLayoutListener;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements HoldingButtonLayoutListener {
 
     private static final float SLIDE_TO_CANCEL_ALPHA_MULTIPLIER = 2.5f;
 
     private HoldingButtonLayout mHoldingButtonLayout;
+    private TextView mTime;
     private EditText mInput;
     private View mSlideToCancel;
 
     private int mAnimationDuration;
+    private ViewPropertyAnimator mTimeAnimator;
     private ViewPropertyAnimator mSlideToCancelAnimator;
     private ViewPropertyAnimator mInputAnimator;
+
+    private DateFormat mFormatter = new SimpleDateFormat("mm:ss:SS");
+    private long mStartTime;
+    private Runnable mTimerRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
         mHoldingButtonLayout = (HoldingButtonLayout) findViewById(R.id.input_holder);
         mHoldingButtonLayout.addListener(this);
 
+        mTime = (TextView) findViewById(R.id.time);
         mInput = (EditText) findViewById(R.id.input);
         mSlideToCancel = findViewById(R.id.slide_to_cancel);
 
@@ -56,13 +68,7 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
 
     @Override
     public void onBeforeExpand() {
-        if (mInputAnimator != null) {
-            mInputAnimator.cancel();
-        }
-
-        if (mSlideToCancelAnimator != null) {
-            mSlideToCancelAnimator.cancel();
-        }
+        cancelAllAnimations();
 
         mSlideToCancel.setTranslationX(0f);
         mSlideToCancel.setAlpha(0f);
@@ -79,22 +85,24 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
             }
         });
         mInputAnimator.start();
+
+        mTime.setTranslationY(mTime.getHeight());
+        mTime.setAlpha(0f);
+        mTime.setVisibility(View.VISIBLE);
+        mTimeAnimator = mTime.animate().translationY(0f).alpha(1f).setDuration(mAnimationDuration);
+        mTimeAnimator.start();
+
     }
 
     @Override
     public void onExpand() {
-
+        mStartTime = System.currentTimeMillis();
+        invalidateTimer();
     }
 
     @Override
     public void onBeforeCollapse() {
-        if (mInputAnimator != null) {
-            mInputAnimator.cancel();
-        }
-
-        if (mSlideToCancelAnimator != null) {
-            mSlideToCancelAnimator.cancel();
-        }
+        cancelAllAnimations();
 
         mSlideToCancelAnimator = mSlideToCancel.animate().alpha(0f).setDuration(mAnimationDuration);
         mSlideToCancelAnimator.setListener(new AnimatorListenerAdapter() {
@@ -110,14 +118,25 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
         mInput.setVisibility(View.VISIBLE);
         mInputAnimator = mInput.animate().alpha(1f).setDuration(mAnimationDuration);
         mInputAnimator.start();
+
+        mTimeAnimator = mTime.animate().translationY(mTime.getHeight()).alpha(0f).setDuration(mAnimationDuration);
+        mTimeAnimator.setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mTime.setVisibility(View.INVISIBLE);
+                mTimeAnimator.setListener(null);
+            }
+        });
+        mTimeAnimator.start();
     }
 
     @Override
     public void onCollapse(boolean isCancel) {
+        stopTimer();
         if (isCancel) {
-            Toast.makeText(this, "Action canceled!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Action canceled! Time " + getFormattedTime(), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Action submited!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Action submitted! Time " + getFormattedTime(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -125,5 +144,41 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
     public void onOffsetChanged(float offset, boolean isCancel) {
         mSlideToCancel.setTranslationX(-mHoldingButtonLayout.getWidth() * offset);
         mSlideToCancel.setAlpha(1 - SLIDE_TO_CANCEL_ALPHA_MULTIPLIER * offset);
+    }
+
+    private void invalidateTimer() {
+        mTimerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mTime.setText(getFormattedTime());
+                invalidateTimer();
+            }
+        };
+
+        mTime.postDelayed(mTimerRunnable, 50);
+    }
+
+    private void stopTimer() {
+        if (mTimerRunnable != null) {
+            mTime.getHandler().removeCallbacks(mTimerRunnable);
+        }
+    }
+
+    private void cancelAllAnimations() {
+        if (mInputAnimator != null) {
+            mInputAnimator.cancel();
+        }
+
+        if (mSlideToCancelAnimator != null) {
+            mSlideToCancelAnimator.cancel();
+        }
+
+        if (mTimeAnimator != null) {
+            mTimeAnimator.cancel();
+        }
+    }
+
+    private String getFormattedTime() {
+        return mFormatter.format(new Date(System.currentTimeMillis() - mStartTime));
     }
 }
