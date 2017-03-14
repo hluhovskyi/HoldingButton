@@ -42,21 +42,21 @@ public class HoldingDrawable extends Drawable {
     private static final float MIN_EXPANDED_RADIUS_MULTIPLIER = 0.3f;
     private static final long DEFAULT_ANIMATION_DURATION_EXPAND = 150L;
     private static final long DEFAULT_ANIMATION_DURATION_COLLAPSE = 150L;
-    private static final long DEFAULT_ANIMATION_DURATION_CANCEL = 150L;
+    private static final long DEFAULT_ANIMATION_DURATION_CANCEL = 200L;
+    private static final long DEFAULT_ANIMATION_DURATION_ICON = 200L;
 
     private Paint mPaint;
-    private Paint mBitmapPaint;
     private Paint mSecondPaint;
 
     private int mIconWidth;
     private int mIconHeight;
-    private Matrix mIconMatrix;
+    private Matrix mIconMatrix = new Matrix();
     private BitmapShader mIconShader;
     private Paint mIconPaint;
 
     private int mCancelIconWidth;
     private int mCancelIconHeight;
-    private Matrix mCancelIconMatrix;
+    private Matrix mCancelIconMatrix = new Matrix();
     private BitmapShader mCancelIconShader;
     private Paint mCancelIconPaint;
 
@@ -65,9 +65,12 @@ public class HoldingDrawable extends Drawable {
 
     private ValueAnimator mAnimator;
     private ValueAnimator mCancelAnimator;
+    private ValueAnimator mIconAnimator;
+
     private float mRadius = 120f;
     private float mSecondRadius = 20f;
-    private float[] mExpandedScaleFactor = new float[1];
+    private float[] mIconScaleFactor = {1f};
+    private float[] mExpandedScaleFactor = {0f};
 
     private int mDefaultColor = Color.parseColor("#3949AB");
     private int mCancelColor = Color.parseColor("#e53935");
@@ -82,9 +85,6 @@ public class HoldingDrawable extends Drawable {
         mSecondPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSecondPaint.setColor(mDefaultColor);
         mSecondPaint.setAlpha(mSecondAlpha);
-
-        mBitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBitmapPaint.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN));
     }
 
     @Override
@@ -103,13 +103,11 @@ public class HoldingDrawable extends Drawable {
                 Paint iconPaint;
                 if (mIsCancel && mCancelIconPaint != null) {
                     iconPaint = mCancelIconPaint;
-                    mCancelIconMatrix.reset();
-                    mCancelIconMatrix.setTranslate(centerX - mIconWidth / 2f, centerY - mIconHeight / 2f);
+                    invalidateMatrix(mCancelIconMatrix, centerX, centerY, mCancelIconWidth, mCancelIconHeight);
                     mCancelIconShader.setLocalMatrix(mCancelIconMatrix);
                 } else {
                     iconPaint = mIconPaint;
-                    mIconMatrix.reset();
-                    mIconMatrix.setTranslate(centerX - mIconWidth / 2f, centerY - mIconHeight / 2f);
+                    invalidateMatrix(mIconMatrix, centerX, centerY, mIconWidth, mIconHeight);
                     mIconShader.setLocalMatrix(mIconMatrix);
                 }
 
@@ -185,6 +183,12 @@ public class HoldingDrawable extends Drawable {
             }
             mCancelAnimator = createCancelValueAnimator();
             mCancelAnimator.start();
+
+            if (mIconAnimator != null) {
+                mIconAnimator.cancel();
+            }
+            mIconAnimator = createIconValueAnimator();
+            mIconAnimator.start();
         }
     }
 
@@ -229,7 +233,6 @@ public class HoldingDrawable extends Drawable {
         if (bitmap != null) {
             mIconWidth = bitmap.getWidth();
             mIconHeight = bitmap.getHeight();
-            mIconMatrix = new Matrix();
             mIconShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             mIconShader.setLocalMatrix(mIconMatrix);
             mIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -250,8 +253,7 @@ public class HoldingDrawable extends Drawable {
         if (bitmap != null) {
             mCancelIconWidth = bitmap.getWidth();
             mCancelIconHeight = bitmap.getHeight();
-            mCancelIconMatrix = new Matrix();
-            mCancelIconShader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            mCancelIconShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
             mCancelIconShader.setLocalMatrix(mCancelIconMatrix);
             mCancelIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mCancelIconPaint.setShader(mCancelIconShader);
@@ -287,6 +289,15 @@ public class HoldingDrawable extends Drawable {
 
     public void setListener(HoldingDrawableListener listener) {
         mListener = listener;
+    }
+
+    private void invalidateMatrix(Matrix matrix, float centerX, float centerY, float width, float height) {
+        matrix.reset();
+        matrix.setScale(mIconScaleFactor[0], mIconScaleFactor[0]);
+        float inverseScaleFactor = 1 - mIconScaleFactor[0];
+        matrix.postTranslate(
+                centerX - width / 2f + width / 2f * inverseScaleFactor,
+                centerY - height / 2f + height / 2f * inverseScaleFactor);
     }
 
     private ValueAnimator createExpandValueAnimator() {
@@ -344,6 +355,18 @@ public class HoldingDrawable extends Drawable {
             }
         });
         animator.setDuration(DEFAULT_ANIMATION_DURATION_CANCEL);
+        return animator;
+    }
+
+    private ValueAnimator createIconValueAnimator() {
+        ValueAnimator animator = ValueAnimator.ofFloat(0.6f, 1f);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mIconScaleFactor[0] = (float) valueAnimator.getAnimatedValue();
+            }
+        });
+        animator.setDuration(DEFAULT_ANIMATION_DURATION_ICON);
         return animator;
     }
 
