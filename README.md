@@ -1,5 +1,7 @@
 # HoldingButton
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-HoldingButton-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5436)
+
 Button which is visible while user holds it. Main use case is controlling audio recording state (like in Telegram, Viber, VK). 
 
 <img src="/_arts/example.gif" width="300" height="533"/>
