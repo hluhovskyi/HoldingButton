@@ -20,13 +20,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
@@ -44,8 +47,18 @@ public class HoldingDrawable extends Drawable {
     private Paint mPaint;
     private Paint mBitmapPaint;
     private Paint mSecondPaint;
-    private Bitmap mIcon;
-    private Bitmap mCancelIcon;
+
+    private int mIconWidth;
+    private int mIconHeight;
+    private Matrix mIconMatrix;
+    private BitmapShader mIconShader;
+    private Paint mIconPaint;
+
+    private int mCancelIconWidth;
+    private int mCancelIconHeight;
+    private Matrix mCancelIconMatrix;
+    private BitmapShader mCancelIconShader;
+    private Paint mCancelIconPaint;
 
     private boolean mIsExpanded = false;
     private boolean mIsCancel = false;
@@ -86,12 +99,26 @@ public class HoldingDrawable extends Drawable {
             float currentRadius = mRadius * (MIN_EXPANDED_RADIUS_MULTIPLIER + (1 - MIN_EXPANDED_RADIUS_MULTIPLIER) * mExpandedScaleFactor[0]);
             canvas.drawCircle(centerX, centerY, currentRadius, mPaint);
 
-            if (mIcon != null) {
-                Bitmap icon = mIcon;
-                if (mIsCancel && mCancelIcon != null) {
-                    icon = mCancelIcon;
+            if (mIconPaint != null) {
+                Paint iconPaint;
+                if (mIsCancel && mCancelIconPaint != null) {
+                    iconPaint = mCancelIconPaint;
+                    mCancelIconMatrix.reset();
+                    mCancelIconMatrix.setTranslate(centerX - mIconWidth / 2f, centerY - mIconHeight / 2f);
+                    mCancelIconShader.setLocalMatrix(mCancelIconMatrix);
+                } else {
+                    iconPaint = mIconPaint;
+                    mIconMatrix.reset();
+                    mIconMatrix.setTranslate(centerX - mIconWidth / 2f, centerY - mIconHeight / 2f);
+                    mIconShader.setLocalMatrix(mIconMatrix);
                 }
-                canvas.drawBitmap(icon, centerX - mIcon.getWidth() / 2, centerY - mIcon.getHeight() / 2, mBitmapPaint);
+
+                canvas.drawRect(
+                        centerX - mIconWidth / 2,
+                        centerY - mIconHeight / 2,
+                        centerX + mIconWidth / 2,
+                        centerY + mIconHeight / 2,
+                        iconPaint);
             }
         }
     }
@@ -199,13 +226,44 @@ public class HoldingDrawable extends Drawable {
     }
 
     public void setIcon(Bitmap bitmap) {
-        mIcon = bitmap;
-        invalidateSelf();
+        if (bitmap != null) {
+            mIconWidth = bitmap.getWidth();
+            mIconHeight = bitmap.getHeight();
+            mIconMatrix = new Matrix();
+            mIconShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            mIconShader.setLocalMatrix(mIconMatrix);
+            mIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mIconPaint.setShader(mIconShader);
+            mIconPaint.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN));
+
+            invalidateSelf();
+        } else {
+            mIconWidth = 0;
+            mIconHeight = 0;
+            mIconShader = null;
+            mIconMatrix = null;
+            mIconPaint = null;
+        }
     }
 
     public void setCancelIcon(Bitmap bitmap) {
-        mCancelIcon = bitmap;
-        invalidateSelf();
+        if (bitmap != null) {
+            mCancelIconWidth = bitmap.getWidth();
+            mCancelIconHeight = bitmap.getHeight();
+            mCancelIconMatrix = new Matrix();
+            mCancelIconShader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            mCancelIconShader.setLocalMatrix(mCancelIconMatrix);
+            mCancelIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mCancelIconPaint.setShader(mCancelIconShader);
+            mCancelIconPaint.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN));
+
+            invalidateSelf();
+        } else {
+            mCancelIconWidth = 0;
+            mCancelIconHeight = 0;
+            mCancelIconMatrix = null;
+            mCancelIconPaint = null;
+        }
     }
 
     @IntRange(from = 0, to = 255)

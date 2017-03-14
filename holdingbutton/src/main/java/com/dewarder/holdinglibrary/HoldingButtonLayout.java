@@ -107,8 +107,7 @@ public class HoldingButtonLayout extends FrameLayout {
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_icon)) {
-                int drawableRes = array.getResourceId(R.styleable.HoldingButtonLayout_hbl_icon, 0);
-                mHoldingDrawable.setIcon(BitmapFactory.decodeResource(getResources(), drawableRes));
+                setIcon(array.getResourceId(R.styleable.HoldingButtonLayout_hbl_icon, 0));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_cancel_icon)) {
