@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
-    artifactVersion = '0.0.4'
+    artifactVersion = '0.0.5'
     artifactName = 'holdingbutton'
     siteUrl = 'https://github.com/dewarder/HoldingButton'
     gitUrl = 'https://github.com/dewarder/HoldingButton.git'
@@ -110,9 +110,9 @@ bintray {
         vcsUrl = gitUrl
         version {
             name = artifactVersion
-            desc = 'Add cancel flag in onCollapse callback.'
+            desc = 'Add icon animation'
             released = new Date()
-            vcsTag = "v$artifactVersion"
+            vcsTag = "$artifactVersion"
         }
     }
 }

@@ -32,7 +32,7 @@
         app:hbl_cancel_icon="@drawable/ic_close_black_24dp"
         app:hbl_holding_view="@+id/start_record"
         app:hbl_icon="@drawable/ic_mic_black_24dp"
-        app:hbl_radius="32dp"
+        app:hbl_radius="40dp"
         app:hbl_second_radius="8dp">
 
         <LinearLayout
