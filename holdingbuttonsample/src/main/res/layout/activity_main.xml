@@ -12,13 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/input_holder"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/activity_main_time_margin_bottom"
         android:text="00:00:00"
         android:visibility="invisible"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="4dp"
+        android:layout_height="@dimen/activity_main_shadow_height"
         android:layout_above="@+id/input_holder"
         android:layout_gravity="bottom"
         android:background="@drawable/background_shadow"/>
@@ -32,31 +32,31 @@
         app:hbl_cancel_icon="@drawable/ic_close_black_24dp"
         app:hbl_holding_view="@+id/start_record"
         app:hbl_icon="@drawable/ic_mic_black_24dp"
-        app:hbl_radius="40dp"
-        app:hbl_second_radius="8dp">
+        app:hbl_radius="@dimen/activity_main_holding_button_radius"
+        app:hbl_second_radius="@dimen/activity_main_holding_button_second_radius">
 
         <LinearLayout
             android:id="@+id/slide_to_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="96dp"
-            android:layout_marginRight="96dp"
+            android:layout_marginEnd="@dimen/activity_main_slide_to_cancel_margin_right"
+            android:layout_marginRight="@dimen/activity_main_slide_to_cancel_margin_right"
             android:gravity="center_vertical"
             android:visibility="invisible">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="@dimen/activity_main_slide_to_cancel_icon_size"
+                android:layout_height="@dimen/activity_main_slide_to_cancel_icon_size"
+                android:layout_marginEnd="@dimen/activity_main_slide_to_cancel_icon_margin_right"
+                android:layout_marginRight="@dimen/activity_main_slide_to_cancel_icon_margin_right"
                 android:scaleType="center"
                 android:src="@drawable/ic_keyboard_arrow_left_black_24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Slide to cancel"/>
+                android:text="@string/label_slide_to_cancel"/>
 
         </LinearLayout>
 
@@ -65,25 +65,25 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:gravity="center"
-            android:minHeight="48dp"
+            android:minHeight="@dimen/activity_main_input_holder_min_height"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginLeft="@dimen/activity_main_input_margin_left"
+                android:layout_marginStart="@dimen/activity_main_input_margin_left"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="Type your message"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textSize="14sp"/>
+                android:hint="@string/hint_type_your_message"
+                android:paddingBottom="@dimen/activity_main_input_padding_vertical"
+                android:paddingTop="@dimen/activity_main_input_padding_vertical"
+                android:textSize="@dimen/activity_main_input_text_size"/>
 
             <ImageView
                 android:id="@+id/start_record"
-                android:layout_width="48dp"
+                android:layout_width="@dimen/activity_main_start_record_width"
                 android:layout_height="match_parent"
                 android:scaleType="center"
                 android:src="@drawable/ic_mic_black_24dp"/>
@@ -91,6 +91,5 @@
         </LinearLayout>
 
     </com.dewarder.holdinglibrary.HoldingButtonLayout>
-
 
 </RelativeLayout>

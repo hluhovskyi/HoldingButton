@@ -35,7 +35,9 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements HoldingButtonLayoutListener {
 
+    private static final DateFormat mFormatter = new SimpleDateFormat("mm:ss:SS");
     private static final float SLIDE_TO_CANCEL_ALPHA_MULTIPLIER = 2.5f;
+    private static final long TIME_INVALIDATION_FREQUENCY = 50L;
 
     private HoldingButtonLayout mHoldingButtonLayout;
     private TextView mTime;
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
     private ViewPropertyAnimator mSlideToCancelAnimator;
     private ViewPropertyAnimator mInputAnimator;
 
-    private DateFormat mFormatter = new SimpleDateFormat("mm:ss:SS");
     private long mStartTime;
     private Runnable mTimerRunnable;
 
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
             }
         };
 
-        mTime.postDelayed(mTimerRunnable, 50);
+        mTime.postDelayed(mTimerRunnable, TIME_INVALIDATION_FREQUENCY);
     }
 
     private void stopTimer() {

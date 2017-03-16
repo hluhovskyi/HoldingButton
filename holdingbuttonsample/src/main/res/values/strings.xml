@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HoldingButtonSample</string>
+    <string name="label_slide_to_cancel">Slide to cancel</string>
+    <string name="hint_type_your_message">Type your message</string>
 </resources>
