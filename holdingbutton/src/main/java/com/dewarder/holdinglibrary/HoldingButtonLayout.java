@@ -226,8 +226,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
             case MotionEvent.ACTION_UP: {
                 if (mIsExpanded) {
-                    mHoldingDrawable.collapse();
-                    mIsExpanded = false;
+                    submit();
                     return true;
                 }
             }
@@ -293,6 +292,20 @@ public class HoldingButtonLayout extends FrameLayout {
         view.getLocationOnScreen(mHoldingViewLocation);
         mHoldingViewRect.offset(mHoldingViewLocation[0], mHoldingViewLocation[1]);
         return mHoldingViewRect.contains((int) event.getRawX(), (int) event.getRawY());
+    }
+
+    public void cancel() {
+        if (mIsExpanded) {
+            mIsCancel = true;
+            submit();
+        }
+    }
+
+    public void submit() {
+        if (mIsExpanded) {
+            mHoldingDrawable.collapse();
+            mIsExpanded = false;
+        }
     }
 
     @ColorInt
