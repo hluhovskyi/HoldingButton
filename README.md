@@ -1,6 +1,6 @@
 # HoldingButton
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-HoldingButton-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5436)
+<a href="http://www.methodscount.com/?lib=com.dewarder%3Aholdingbutton%3A0.0.5"><img src="https://img.shields.io/badge/Size-22 KB-e91e63.svg"/></a> <a href="http://www.methodscount.com/?lib=com.dewarder%3Aholdingbutton%3A0.0.5"><img src="https://img.shields.io/badge/Methods count-core: 249 | deps: 32-e91e63.svg"/></a> [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-HoldingButton-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5436)
 
 Button which is visible while user holds it. Main use case is controlling audio recording state (like in Telegram, Viber, VK). 
 
