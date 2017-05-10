@@ -1,6 +1,7 @@
 <resources>
 
     <declare-styleable name="HoldingButtonLayout">
+        <attr name="hbl_enabled" format="boolean"/>
         <attr name="hbl_radius" format="dimension"/>
         <attr name="hbl_icon" format="reference"/>
         <attr name="hbl_cancel_icon" format="reference"/>

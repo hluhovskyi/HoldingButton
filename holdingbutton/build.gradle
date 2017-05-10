@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
-    artifactVersion = '0.0.6'
+    artifactVersion = '0.0.7'
     artifactName = 'holdingbutton'
     siteUrl = 'https://github.com/dewarder/HoldingButton'
     gitUrl = 'https://github.com/dewarder/HoldingButton.git'
@@ -110,7 +110,7 @@ bintray {
         vcsUrl = gitUrl
         version {
             name = artifactVersion
-            desc = 'Add cancel and submit methods'
+            desc = 'Add ability to enable/disable HoldingButton'
             released = new Date()
             vcsTag = "$artifactVersion"
         }

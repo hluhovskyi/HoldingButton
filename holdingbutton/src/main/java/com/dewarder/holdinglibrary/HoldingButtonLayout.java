@@ -56,6 +56,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
     private Direction mDirection = Direction.START;
     private boolean mAnimateHoldingView = true;
+    private boolean mButtonEnabled = true;
     private boolean mIsCancel = false;
     private boolean mIsExpanded = false;
 
@@ -101,6 +102,10 @@ public class HoldingButtonLayout extends FrameLayout {
                                                                          R.styleable.HoldingButtonLayout,
                                                                          defStyleAttr,
                                                                          defStyleRes);
+
+            if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_enabled)) {
+                setButtonEnabled(array.getBoolean(R.styleable.HoldingButtonLayout_hbl_enabled, true));
+            }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_radius)) {
                 mHoldingDrawable.setRadius(array.getDimensionPixelSize(R.styleable.HoldingButtonLayout_hbl_radius, 280));
@@ -173,7 +178,7 @@ public class HoldingButtonLayout extends FrameLayout {
         final int action = ev.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                return isViewTouched(mHoldingView, ev);
+                return isButtonEnabled() && isViewTouched(mHoldingView, ev);
             }
         }
 
@@ -186,7 +191,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if (isViewTouched(mHoldingView, event)) {
+                if (isButtonEnabled() && isViewTouched(mHoldingView, event)) {
                     mHoldingView.getLocationInWindow(mHoldingViewLocation);
                     getLocationInWindow(mViewLocation);
 
@@ -306,6 +311,14 @@ public class HoldingButtonLayout extends FrameLayout {
             mHoldingDrawable.collapse();
             mIsExpanded = false;
         }
+    }
+
+    public boolean isButtonEnabled() {
+        return mButtonEnabled;
+    }
+
+    public void setButtonEnabled(boolean enabled) {
+        mButtonEnabled = enabled;
     }
 
     @ColorInt

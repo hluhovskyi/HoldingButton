@@ -11,7 +11,7 @@ Button which is visible while user holds it. Main use case is controlling audio 
 Add library as dependency to your `build.gradle`.
 
 ```
-compile 'com.dewarder:holdingbutton:0.0.6'
+compile 'com.dewarder:holdingbutton:0.0.7'
 ```
 
 ## How to use
@@ -79,6 +79,10 @@ compile 'com.dewarder:holdingbutton:0.0.6'
    ![Check full example](https://github.com/dewarder/HoldingButton/tree/master/holdingbuttonsample)
 
 ## All XML properties
+
+- `hbl_enabled` (`isButtonEnabled/setButtonEnabled`)
+
+   Set enabled or disabled state of button only.
 
 - `hbl_direction` (`getDirection/setDirection`)
 
