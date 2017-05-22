@@ -36,6 +36,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,7 @@ public class HoldingButtonLayout extends FrameLayout {
     private boolean mIsCancel = false;
     private boolean mIsExpanded = false;
 
+    private HoldingButtonTouchListener mTouchListener = new SimpleHoldingButtonTouchListener();
     private final DrawableListener mDrawableListener = new DrawableListener();
     private final List<HoldingButtonLayoutListener> mListeners = new ArrayList<>();
 
@@ -178,7 +180,7 @@ public class HoldingButtonLayout extends FrameLayout {
         final int action = ev.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                return isButtonEnabled() && isViewTouched(mHoldingView, ev);
+                return isButtonEnabled() && shouldInterceptAnimation() && isViewTouched(mHoldingView, ev);
             }
         }
 
@@ -191,7 +193,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if (isButtonEnabled() && isViewTouched(mHoldingView, event)) {
+                if (isButtonEnabled() && shouldInterceptAnimation() && isViewTouched(mHoldingView, event)) {
                     mHoldingView.getLocationInWindow(mHoldingViewLocation);
                     getLocationInWindow(mViewLocation);
 
@@ -284,12 +286,20 @@ public class HoldingButtonLayout extends FrameLayout {
         return view;
     }
 
+    public void setTouchListener(@NonNull HoldingButtonTouchListener listener) {
+        mTouchListener = listener;
+    }
+
     public void addListener(HoldingButtonLayoutListener listener) {
         mListeners.add(listener);
     }
 
     public void removeListener(HoldingButtonLayoutListener listener) {
         mListeners.remove(listener);
+    }
+
+    private boolean shouldInterceptAnimation() {
+        return mTouchListener.onHoldingViewTouched();
     }
 
     private boolean isViewTouched(View view, MotionEvent event) {
@@ -439,6 +449,14 @@ public class HoldingButtonLayout extends FrameLayout {
     private void notifyOnOffsetChanged(float offset, boolean isCancel) {
         for (HoldingButtonLayoutListener listener : mListeners) {
             listener.onOffsetChanged(offset, isCancel);
+        }
+    }
+
+    private class SimpleHoldingButtonTouchListener implements HoldingButtonTouchListener {
+
+        @Override
+        public boolean onHoldingViewTouched() {
+            return true;
         }
     }
 
