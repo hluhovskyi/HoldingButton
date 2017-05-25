@@ -36,7 +36,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,7 +179,7 @@ public class HoldingButtonLayout extends FrameLayout {
         final int action = ev.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                return isButtonEnabled() && shouldInterceptAnimation() && isViewTouched(mHoldingView, ev);
+                return isButtonEnabled() && isViewTouched(mHoldingView, ev);
             }
         }
 
@@ -193,7 +192,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                if (isButtonEnabled() && shouldInterceptAnimation() && isViewTouched(mHoldingView, event)) {
+                if (isButtonEnabled() && isViewTouched(mHoldingView, event) && shouldInterceptAnimation()) {
                     mHoldingView.getLocationInWindow(mHoldingViewLocation);
                     getLocationInWindow(mViewLocation);
 

@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
-    artifactVersion = '0.0.8'
+    artifactVersion = '0.0.9'
     artifactName = 'holdingbutton'
     siteUrl = 'https://github.com/dewarder/HoldingButton'
     gitUrl = 'https://github.com/dewarder/HoldingButton.git'
@@ -110,7 +110,7 @@ bintray {
         vcsUrl = gitUrl
         version {
             name = artifactVersion
-            desc = 'Add ability to intercept expanding animation'
+            desc = 'Fixed touch listener area'
             released = new Date()
             vcsTag = "$artifactVersion"
         }
