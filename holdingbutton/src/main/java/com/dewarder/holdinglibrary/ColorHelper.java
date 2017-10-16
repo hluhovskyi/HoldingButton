@@ -18,9 +18,9 @@ package com.dewarder.holdinglibrary;
 
 import android.graphics.Color;
 
-public final class ColorUtils {
+final class ColorHelper {
 
-    public static int blend(int from, int to, float ratio) {
+    static int blend(int from, int to, float ratio) {
         float inverseRatio = 1f - ratio;
 
         float a = Color.alpha(to) * ratio + Color.alpha(from) * inverseRatio;

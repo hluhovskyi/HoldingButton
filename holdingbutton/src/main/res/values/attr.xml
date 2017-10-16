@@ -17,6 +17,8 @@
         <attr name="hbl_direction" format="enum">
             <enum name="start" value="0"/>
             <enum name="end" value="1"/>
+            <enum name="left" value="2"/>
+            <enum name="right" value="3"/>
         </attr>
     </declare-styleable>
 

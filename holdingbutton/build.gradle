@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
-    artifactVersion = '0.0.9'
+    artifactVersion = '0.1.0'
     artifactName = 'holdingbutton'
     siteUrl = 'https://github.com/dewarder/HoldingButton'
     gitUrl = 'https://github.com/dewarder/HoldingButton.git'
@@ -13,18 +13,16 @@ version = artifactVersion
 group = 'com.dewarder'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName artifactVersion
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -35,9 +33,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-annotations:25.2.0'
+    compile 'com.android.support:support-annotations:25.3.1'
 }
-
 
 install {
     repositories.mavenInstaller {
@@ -110,7 +107,7 @@ bintray {
         vcsUrl = gitUrl
         version {
             name = artifactVersion
-            desc = 'Fixed touch listener area'
+            desc = 'Add RTL support. Upgrade dependencies versions.'
             released = new Date()
             vcsTag = "$artifactVersion"
         }

@@ -347,7 +347,7 @@ public class HoldingDrawable extends Drawable {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator a) {
-                int color = ColorUtils.blend(from, to, (float) a.getAnimatedValue());
+                int color = ColorHelper.blend(from, to, (float) a.getAnimatedValue());
                 mPaint.setColor(color);
                 mSecondPaint.setColor(color);
                 mSecondPaint.setAlpha(mSecondAlpha);
