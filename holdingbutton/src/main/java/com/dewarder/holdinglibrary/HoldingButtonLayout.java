@@ -23,6 +23,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
@@ -397,7 +398,11 @@ public class HoldingButtonLayout extends FrameLayout {
     }
 
     public void setIcon(@DrawableRes int drawableRes) {
-        setIcon(VectorDrawableHelper.getBitmap(getContext(), drawableRes));
+        setIcon(DrawableHelper.getBitmap(getContext(), drawableRes));
+    }
+
+    public void setIcon(Drawable drawable) {
+        setIcon(DrawableHelper.getBitmap(drawable));
     }
 
     public void setIcon(Bitmap bitmap) {
