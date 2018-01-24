@@ -40,6 +40,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class HoldingButtonLayout extends FrameLayout {
 
     private static final float DEFAULT_CANCEL_OFFSET = 0.3f;
@@ -112,9 +113,9 @@ public class HoldingButtonLayout extends FrameLayout {
 
         if (attrs != null) {
             TypedArray array = context.getTheme().obtainStyledAttributes(attrs,
-                                                                         R.styleable.HoldingButtonLayout,
-                                                                         defStyleAttr,
-                                                                         defStyleRes);
+                    R.styleable.HoldingButtonLayout,
+                    defStyleAttr,
+                    defStyleRes);
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_enabled)) {
                 setButtonEnabled(array.getBoolean(R.styleable.HoldingButtonLayout_hbl_enabled, true));
@@ -396,7 +397,7 @@ public class HoldingButtonLayout extends FrameLayout {
     }
 
     public void setIcon(@DrawableRes int drawableRes) {
-        setIcon(BitmapFactory.decodeResource(getResources(), drawableRes));
+        setIcon(VectorDrawableHelper.getBitmap(getContext(), drawableRes));
     }
 
     public void setIcon(Bitmap bitmap) {

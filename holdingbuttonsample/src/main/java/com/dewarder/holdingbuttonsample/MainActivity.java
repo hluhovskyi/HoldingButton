@@ -57,11 +57,11 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mHoldingButtonLayout = (HoldingButtonLayout) findViewById(R.id.input_holder);
+        mHoldingButtonLayout = findViewById(R.id.input_holder);
         mHoldingButtonLayout.addListener(this);
 
-        mTime = (TextView) findViewById(R.id.time);
-        mInput = (EditText) findViewById(R.id.input);
+        mTime = findViewById(R.id.time);
+        mInput = findViewById(R.id.input);
         mSlideToCancel = findViewById(R.id.slide_to_cancel);
 
         mAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
