@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
-    artifactVersion = '0.1.0'
+    artifactVersion = '0.1.1'
     artifactName = 'holdingbutton'
     siteUrl = 'https://github.com/dewarder/HoldingButton'
     gitUrl = 'https://github.com/dewarder/HoldingButton.git'
@@ -92,9 +92,12 @@ artifacts {
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
+def bintrayUser = hasProperty('bintrayUser') ? bintrayUser : ""
+def bintrayKey = hasProperty('bintrayKey') ? bintrayKey : ""
+
 bintray {
-    user = properties['bintray.user']
-    key = properties['bintray.apikey']
+    user = bintrayUser
+    key = bintrayKey
     configurations = ['archives']
     publish = true
     pkg {
@@ -105,7 +108,7 @@ bintray {
         vcsUrl = gitUrl
         version {
             name = artifactVersion
-            desc = 'Add RTL support. Upgrade dependencies versions.'
+            desc = 'Add VectorDrawable support. Add setIcon method for Drawable'
             released = new Date()
             vcsTag = "$artifactVersion"
         }
