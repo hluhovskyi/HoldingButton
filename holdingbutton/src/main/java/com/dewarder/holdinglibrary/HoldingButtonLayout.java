@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -131,8 +130,7 @@ public class HoldingButtonLayout extends FrameLayout {
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_cancel_icon)) {
-                int drawableRes = array.getResourceId(R.styleable.HoldingButtonLayout_hbl_cancel_icon, 0);
-                mHoldingDrawable.setCancelIcon(BitmapFactory.decodeResource(getResources(), drawableRes));
+                setCancelIcon(array.getResourceId(R.styleable.HoldingButtonLayout_hbl_cancel_icon, 0));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_offset_x)) {
@@ -407,6 +405,18 @@ public class HoldingButtonLayout extends FrameLayout {
 
     public void setIcon(Bitmap bitmap) {
         mHoldingDrawable.setIcon(bitmap);
+    }
+
+    public void setCancelIcon(@DrawableRes int drawableRes) {
+        setCancelIcon(DrawableHelper.getBitmap(getContext(), drawableRes));
+    }
+
+    public void setCancelIcon(Drawable drawable) {
+        setCancelIcon(DrawableHelper.getBitmap(drawable));
+    }
+
+    public void setCancelIcon(Bitmap bitmap) {
+        mHoldingDrawable.setCancelIcon(bitmap);
     }
 
     public View getHoldingView() {
