@@ -266,8 +266,8 @@ public class HoldingButtonLayout extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mHoldingCircle.getParent() != null){
-            ((ViewGroup)mHoldingCircle.getParent()).removeView(mHoldingCircle);
+        if (mHoldingCircle.getParent() != null) {
+            ((ViewGroup) mHoldingCircle.getParent()).removeView(mHoldingCircle);
         }
         getDecorView().addView(mHoldingCircle, mHoldingDrawable.getIntrinsicWidth(), mHoldingDrawable.getIntrinsicHeight());
     }

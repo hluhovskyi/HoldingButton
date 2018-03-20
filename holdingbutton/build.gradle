@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
-    artifactVersion = '0.1.2'
+    artifactVersion = '0.1.3'
     artifactName = 'holdingbutton'
     siteUrl = 'https://github.com/dewarder/HoldingButton'
     gitUrl = 'https://github.com/dewarder/HoldingButton.git'
@@ -34,61 +34,6 @@ dependencies {
     implementation dep.supportCoreUtils
 }
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name artifactName
-                url siteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'dewarder'
-                        name 'Artem Glugovsky'
-                        email 'dewarder@gmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-task classesJar(type: Jar) {
-    from "$buildDir/intermediates/classes/release"
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
@@ -108,7 +53,7 @@ bintray {
         vcsUrl = gitUrl
         version {
             name = artifactVersion
-            desc = 'Add VectorDrawable support for cancel icon. Add setCancelIcon method for Drawable'
+            desc = 'Fix bug related to reattaching view'
             released = new Date()
             vcsTag = "$artifactVersion"
         }
