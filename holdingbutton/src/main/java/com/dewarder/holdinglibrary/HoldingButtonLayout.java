@@ -55,8 +55,7 @@ public class HoldingButtonLayout extends FrameLayout {
     private float mCancelOffset = DEFAULT_CANCEL_OFFSET;
     private float mDeltaX;
 
-    private View mHoldingCircle;
-    private HoldingDrawable mHoldingDrawable;
+    private HoldingButton mHoldingButton;
     private int[] mOffset = new int[2];
     private int[] mViewLocation = new int[2];
     private int[] mHoldingViewLocation = new int[2];
@@ -107,8 +106,8 @@ public class HoldingButtonLayout extends FrameLayout {
     private void init(Context context, AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
         mCollapsingAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        mHoldingDrawable = new HoldingDrawable();
-        mHoldingDrawable.setListener(mDrawableListener);
+        mHoldingButton = new HoldingButton(context);
+        mHoldingButton.setListener(mDrawableListener);
         mLayoutDirection = DirectionHelper.resolveLayoutDirection(this);
 
         if (attrs != null) {
@@ -122,7 +121,7 @@ public class HoldingButtonLayout extends FrameLayout {
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_radius)) {
-                mHoldingDrawable.setRadius(array.getDimensionPixelSize(R.styleable.HoldingButtonLayout_hbl_radius, 280));
+                mHoldingButton.setRadius(array.getDimensionPixelSize(R.styleable.HoldingButtonLayout_hbl_radius, 280));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_icon)) {
@@ -150,15 +149,15 @@ public class HoldingButtonLayout extends FrameLayout {
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_color)) {
-                mHoldingDrawable.setColor(array.getColor(R.styleable.HoldingButtonLayout_hbl_color, 0));
+                mHoldingButton.setColor(array.getColor(R.styleable.HoldingButtonLayout_hbl_color, 0));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_cancel_color)) {
-                mHoldingDrawable.setCancelColor(array.getColor(R.styleable.HoldingButtonLayout_hbl_cancel_color, 0));
+                mHoldingButton.setCancelColor(array.getColor(R.styleable.HoldingButtonLayout_hbl_cancel_color, 0));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_second_radius)) {
-                mHoldingDrawable.setSecondRadius(array.getDimension(R.styleable.HoldingButtonLayout_hbl_second_radius, 0));
+                mHoldingButton.setSecondRadius(array.getDimension(R.styleable.HoldingButtonLayout_hbl_second_radius, 0));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_second_alpha)) {
@@ -166,7 +165,7 @@ public class HoldingButtonLayout extends FrameLayout {
                 if (alphaMultiplier < 0 && alphaMultiplier > 1) {
                     throw new IllegalStateException("Second alpha value must be between 0 and 1");
                 }
-                mHoldingDrawable.setSecondAlpha((int) (255 * alphaMultiplier));
+                mHoldingButton.setSecondAlpha((int) (255 * alphaMultiplier));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_cancel_offset)) {
@@ -216,20 +215,20 @@ public class HoldingButtonLayout extends FrameLayout {
 
                     int layoutWidth = getWidth();
                     int viewCenterX = mHoldingViewLocation[0] + mHoldingView.getWidth() / 2;
-                    int circleCenterX = mHoldingCircle.getWidth() / 2;
+                    int circleCenterX = mHoldingButton.getWidth() / 2;
                     int offsetX = mDirection.getOffsetX(mOffset[0]);
                     float translationX = mLayoutDirection.calculateTranslationX(
                             layoutWidth, viewCenterX, circleCenterX, offsetX);
 
                     int centerY = mHoldingViewLocation[1] + mHoldingView.getHeight() / 2;
-                    float translationY = centerY - mHoldingCircle.getHeight() / 2f + mOffset[1];
+                    float translationY = centerY - mHoldingButton.getHeight() / 2f + mOffset[1];
 
-                    mHoldingCircle.setTranslationX(translationX);
-                    mHoldingCircle.setTranslationY(translationY);
+                    mHoldingButton.setTranslationX(translationX);
+                    mHoldingButton.setTranslationY(translationY);
 
                     mDeltaX = event.getRawX() - viewCenterX - offsetX;
 
-                    mHoldingDrawable.expand();
+                    mHoldingButton.expand();
                     mIsCancel = false;
                     mIsExpanded = true;
                     return true;
@@ -238,14 +237,14 @@ public class HoldingButtonLayout extends FrameLayout {
 
             case MotionEvent.ACTION_MOVE: {
                 if (mIsExpanded) {
-                    float circleCenterX = mHoldingCircle.getWidth() / 2;
+                    float circleCenterX = mHoldingButton.getWidth() / 2;
                     float x = event.getRawX() - mDeltaX - circleCenterX;
                     float slideOffset = mDirection.getSlideOffset(x, circleCenterX, mViewLocation, getWidth(), mHoldingViewLocation, mHoldingView.getWidth(), mOffset);
 
                     if (slideOffset >= 0 && slideOffset <= 1) {
-                        mHoldingCircle.setX(x);
+                        mHoldingButton.setX(x);
                         mIsCancel = slideOffset >= mCancelOffset;
-                        mHoldingDrawable.setCancel(mIsCancel);
+                        mHoldingButton.setCancel(mIsCancel);
                         notifyOnOffsetChanged(slideOffset, mIsCancel);
                     }
                     return true;
@@ -266,10 +265,11 @@ public class HoldingButtonLayout extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mHoldingCircle.getParent() != null) {
-            ((ViewGroup) mHoldingCircle.getParent()).removeView(mHoldingCircle);
+        if (mHoldingButton.getParent() != null) {
+            ((ViewGroup) mHoldingButton.getParent()).removeView(mHoldingButton);
         }
-        getDecorView().addView(mHoldingCircle, mHoldingDrawable.getIntrinsicWidth(), mHoldingDrawable.getIntrinsicHeight());
+        int totalRadius = (int) (mHoldingButton.getRadius() * 2 + mHoldingButton.getSecondRadius() * 2);
+        getDecorView().addView(mHoldingButton, totalRadius, totalRadius);
     }
 
     @Override
@@ -282,14 +282,7 @@ public class HoldingButtonLayout extends FrameLayout {
         if (mHoldingView == null) {
             throw new IllegalStateException("Holding view doesn't set. Call setHoldingView before inflate");
         }
-
-        mHoldingCircle = new View(getContext());
-        mHoldingCircle.setVisibility(INVISIBLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mHoldingCircle.setBackground(mHoldingDrawable);
-        } else {
-            mHoldingCircle.setBackgroundDrawable(mHoldingDrawable);
-        }
+        mHoldingButton.setVisibility(INVISIBLE);
     }
 
     protected ViewGroup getDecorView() {
@@ -342,7 +335,7 @@ public class HoldingButtonLayout extends FrameLayout {
 
     public void submit() {
         if (mIsExpanded) {
-            mHoldingDrawable.collapse();
+            mHoldingButton.collapse();
             mIsExpanded = false;
         }
     }
@@ -357,20 +350,20 @@ public class HoldingButtonLayout extends FrameLayout {
 
     @ColorInt
     public int getColor() {
-        return mHoldingDrawable.getColor();
+        return mHoldingButton.getColor();
     }
 
     public void setColor(@ColorInt int color) {
-        mHoldingDrawable.setColor(color);
+        mHoldingButton.setColor(color);
     }
 
     @ColorInt
     public int getCancelColor() {
-        return mHoldingDrawable.getCancelColor();
+        return mHoldingButton.getCancelColor();
     }
 
     public void setCancelColor(@ColorInt int color) {
-        mHoldingDrawable.setCancelColor(color);
+        mHoldingButton.setCancelColor(color);
     }
 
     @FloatRange(from = 0, to = 1)
@@ -383,19 +376,19 @@ public class HoldingButtonLayout extends FrameLayout {
     }
 
     public float getRadius() {
-        return mHoldingDrawable.getRadius();
+        return mHoldingButton.getRadius();
     }
 
     public void setRadius(float radius) {
-        mHoldingDrawable.setRadius(radius);
+        mHoldingButton.setRadius(radius);
     }
 
     public float getSecondRadius() {
-        return mHoldingDrawable.getSecondRadius();
+        return mHoldingButton.getSecondRadius();
     }
 
     public void setSecondRadius(float radius) {
-        mHoldingDrawable.setSecondRadius(radius);
+        mHoldingButton.setSecondRadius(radius);
     }
 
     public void setIcon(@DrawableRes int drawableRes) {
@@ -407,7 +400,7 @@ public class HoldingButtonLayout extends FrameLayout {
     }
 
     public void setIcon(Bitmap bitmap) {
-        mHoldingDrawable.setIcon(bitmap);
+        mHoldingButton.setIcon(bitmap);
     }
 
     public void setCancelIcon(@DrawableRes int drawableRes) {
@@ -419,7 +412,7 @@ public class HoldingButtonLayout extends FrameLayout {
     }
 
     public void setCancelIcon(Bitmap bitmap) {
-        mHoldingDrawable.setCancelIcon(bitmap);
+        mHoldingButton.setCancelIcon(bitmap);
     }
 
     public View getHoldingView() {
@@ -505,8 +498,8 @@ public class HoldingButtonLayout extends FrameLayout {
         @Override
         public void onBeforeExpand() {
             notifyOnBeforeExpand();
-            mHoldingDrawable.reset();
-            mHoldingCircle.setVisibility(VISIBLE);
+            mHoldingButton.reset();
+            mHoldingButton.setVisibility(VISIBLE);
 
             if (mAnimateHoldingView) {
                 mHoldingView.setVisibility(INVISIBLE);
@@ -526,7 +519,7 @@ public class HoldingButtonLayout extends FrameLayout {
         @Override
         public void onCollapse() {
             notifyOnCollapse(mIsCancel);
-            mHoldingCircle.setVisibility(GONE);
+            mHoldingButton.setVisibility(GONE);
 
             if (mAnimateHoldingView) {
                 mHoldingView.setAlpha(COLLAPSING_ALPHA_VALUE_START);
