@@ -33,6 +33,7 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
+import android.support.annotation.Px;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
@@ -82,6 +83,9 @@ class HoldingButton extends View {
     {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(mDefaultColor);
+        //mPaint.setShadowLayer(12, 0, 10, Color.BLACK);
+
+       // setLayerType(LAYER_TYPE_SOFTWARE, mPaint);
 
         mSecondPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSecondPaint.setColor(mDefaultColor);
@@ -280,6 +284,11 @@ class HoldingButton extends View {
     public void setSecondRadius(float radius) {
         mSecondRadius = radius;
         invalidate();
+    }
+
+    @Px
+    public int getTotalRadius() {
+        return (int) (mRadius + mSecondRadius);
     }
 
     public void setListener(HoldingDrawableListener listener) {
