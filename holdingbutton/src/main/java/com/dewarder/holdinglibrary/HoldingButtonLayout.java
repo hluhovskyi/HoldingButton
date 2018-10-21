@@ -154,8 +154,8 @@ public class HoldingButtonLayout extends FrameLayout {
                 mHoldingButton.setCancelColor(array.getColor(R.styleable.HoldingButtonLayout_hbl_cancel_color, 0));
             }
 
-            if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_second_radius)) {
-                mHoldingButton.setSecondRadius(array.getDimension(R.styleable.HoldingButtonLayout_hbl_second_radius, 0));
+            if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_amplitude_radius)) {
+                mHoldingButton.setAmplitudeRadius(array.getDimensionPixelOffset(R.styleable.HoldingButtonLayout_hbl_amplitude_radius, 0));
             }
 
             if (array.hasValue(R.styleable.HoldingButtonLayout_hbl_second_alpha)) {
@@ -346,16 +346,24 @@ public class HoldingButtonLayout extends FrameLayout {
         return mHoldingButton.getRadius();
     }
 
-    public void setRadius(float radius) {
+    public void setRadius(int radius) {
         mHoldingButton.setRadius(radius);
     }
 
-    public float getSecondRadius() {
-        return mHoldingButton.getSecondRadius();
+    public float getAmplitudeRadius() {
+        return mHoldingButton.getAmplitudeRadius();
     }
 
-    public void setSecondRadius(float radius) {
-        mHoldingButton.setSecondRadius(radius);
+    public void setAmplitudeRadius(int radius) {
+        mHoldingButton.setAmplitudeRadius(radius);
+    }
+
+    public void setAmplitude(@FloatRange(from = 0f, to = 1f) float amplitude) {
+        setAmplitude(amplitude, true);
+    }
+
+    public void setAmplitude(@FloatRange(from = 0f, to = 1f) float amplitude, boolean animate) {
+        mHoldingButton.setAmplitude(amplitude, animate);
     }
 
     public void setIcon(@DrawableRes int drawableRes) {
@@ -366,7 +374,7 @@ public class HoldingButtonLayout extends FrameLayout {
         setIcon(DrawableHelper.getBitmap(drawable));
     }
 
-    public void setIcon(Bitmap bitmap) {
+    public void setIcon(@Nullable Bitmap bitmap) {
         mHoldingButton.setIcon(bitmap);
     }
 
@@ -374,11 +382,11 @@ public class HoldingButtonLayout extends FrameLayout {
         setCancelIcon(DrawableHelper.getBitmap(getContext(), drawableRes));
     }
 
-    public void setCancelIcon(Drawable drawable) {
+    public void setCancelIcon(@Nullable Drawable drawable) {
         setCancelIcon(DrawableHelper.getBitmap(drawable));
     }
 
-    public void setCancelIcon(Bitmap bitmap) {
+    public void setCancelIcon(@Nullable Bitmap bitmap) {
         mHoldingButton.setCancelIcon(bitmap);
     }
 

@@ -33,7 +33,7 @@
         app:hbl_holding_view="@+id/start_record"
         app:hbl_icon="@drawable/ic_mic_black_24dp"
         app:hbl_radius="@dimen/activity_main_holding_button_radius"
-        app:hbl_second_radius="@dimen/activity_main_holding_button_second_radius">
+        app:hbl_amplitude_radius="@dimen/activity_main_holding_button_second_radius">
 
         <LinearLayout
             android:id="@+id/slide_to_cancel"

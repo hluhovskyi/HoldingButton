@@ -10,7 +10,7 @@
         <attr name="hbl_holding_view" format="reference"/>
         <attr name="hbl_color" format="color"/>
         <attr name="hbl_cancel_color" format="color"/>
-        <attr name="hbl_second_radius" format="dimension"/>
+        <attr name="hbl_amplitude_radius" format="dimension"/>
         <attr name="hbl_second_alpha" format="float"/>
         <attr name="hbl_cancel_offset" format="float"/>
         <attr name="hbl_animate_holding_view" format="boolean"/>

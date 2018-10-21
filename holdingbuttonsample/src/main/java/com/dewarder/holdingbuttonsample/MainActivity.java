@@ -19,6 +19,8 @@ package com.dewarder.holdingbuttonsample;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -32,6 +34,7 @@ import com.dewarder.holdinglibrary.HoldingButtonLayoutListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements HoldingButtonLayoutListener {
 
@@ -67,6 +70,19 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
         mAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
+    private Random random = new Random();
+    private Handler handler = new Handler(Looper.getMainLooper());
+
+    private void postAmplitude() {
+        mHoldingButtonLayout.setAmplitude(random.nextFloat());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                postAmplitude();
+            }
+        }, 200);
+    }
+
     @Override
     public void onBeforeExpand() {
         cancelAllAnimations();
@@ -99,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements HoldingButtonLayo
     public void onExpand() {
         mStartTime = System.currentTimeMillis();
         invalidateTimer();
+       // postAmplitude();
     }
 
     @Override
