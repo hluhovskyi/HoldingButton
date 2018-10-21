@@ -49,6 +49,7 @@ class HoldingButton extends View {
 
     private Paint mPaint;
     private Paint mSecondPaint;
+    private Paint mShadowPaint;
 
     private int mIconWidth;
     private int mIconHeight;
@@ -83,9 +84,9 @@ class HoldingButton extends View {
     {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(mDefaultColor);
-        //mPaint.setShadowLayer(12, 0, 10, Color.BLACK);
 
-       // setLayerType(LAYER_TYPE_SOFTWARE, mPaint);
+        mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mShadowPaint.setShadowLayer(16, 0, 4, 0x33000000);
 
         mSecondPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSecondPaint.setColor(mDefaultColor);
@@ -123,6 +124,7 @@ class HoldingButton extends View {
             }
 
             float currentRadius = mRadius * (MIN_EXPANDED_RADIUS_MULTIPLIER + (1 - MIN_EXPANDED_RADIUS_MULTIPLIER) * mExpandedScaleFactor[0]);
+            canvas.drawCircle(centerX, centerY, currentRadius, mShadowPaint);
             canvas.drawCircle(centerX, centerY, currentRadius, mPaint);
 
             if (mIconPaint != null) {
